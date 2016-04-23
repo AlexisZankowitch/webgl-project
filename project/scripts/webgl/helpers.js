@@ -3,7 +3,13 @@
  */
 requirejs(["scripts/webgl/libs/helpers.js"], function (util) {
     console.log('webgl loaded');
-    requirejs(["scripts/webgl/global_variables.js"], function (util) {
-        console.log("global varaibles");
+    requirejs(["scripts/webgl/obj/helpers.js"], function (util) {
+        requirejs(["scripts/webgl/global_variables.js"], function () {
+            requirejs(["scripts/webgl/interactions.js"], function () {
+                requirejs(["scripts/webgl/webgl.js"], function () {
+                    console.log("script webgl");
+                })
+            });
+        });
     });
 });
