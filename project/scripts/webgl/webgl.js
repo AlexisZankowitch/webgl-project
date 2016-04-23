@@ -117,22 +117,28 @@ function setMatrixUniforms()
 //TEXTURES
 function initTexture()
 {
-    texture0 = gl.createTexture();
-    texture0.image = new Image();
-    texture0.image.onload = function()
-    {
-        handleLoadedTexture(texture0);
-        tex_loaded = true;
-    };
+    for (var i=0; i<objects.length;i++){
+        createTexture(i,objects[i].imgTexture);
+    }
+}
 
-    texture0.image.src = "./img/moon.gif"; // note : croos origin problem with chrome outside webserver
-    texture0.image.src = "./img/earth.jpg"; // note : croos origin problem with chrome outside webserver
+function createTexture(i,src){
+    textures[i] = gl.createTexture();
+    textures[i].image = new Image();
+    textures[i].image.onload = function()
+    {
+        handleLoadedTexture(textures[i]);
+        if(i === objects.length-1){
+            tex_loaded = true;
+        }
+    };
+    textures[i].image.src = src;
 }
 
 function handleLoadedTexture(texture)
 {
     gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-    gl.bindTexture(gl.TEXTURE_2D, texture0);
+    gl.bindTexture(gl.TEXTURE_2D, texture);
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, texture.image);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
@@ -148,13 +154,13 @@ function degToRad(degrees)
     return degrees * Math.PI / 180;
 }
 
-
-function pol2Cart(longi, lat, resLongi, resLat)
+//add radius to change sphere size
+function pol2Cart(longi, lat, radius)
 {
     return [
-        Math.cos(degToRad(lat))*Math.sin(degToRad(longi)),
-        Math.sin(degToRad(lat)),
-        Math.cos(degToRad(lat))*Math.cos(degToRad(longi))
+        Math.cos(degToRad(lat))*Math.sin(degToRad(longi))*radius,
+        Math.sin(degToRad(lat))*radius,
+        Math.cos(degToRad(lat))*Math.cos(degToRad(longi))*radius
     ];
 }
 
@@ -172,7 +178,7 @@ function drawScene()
     mat4.translate(mvMatrix, [0, 0.0, -10.0]);
 
     gl.activeTexture(gl.TEXTURE0);
-    gl.bindTexture(gl.TEXTURE_2D, texture0);
+    gl.bindTexture(gl.TEXTURE_2D, textures[0]);
     gl.uniform1i(shaderProgram.samplerUniform, 0);
 
     rootObject.draw();
@@ -180,29 +186,31 @@ function drawScene()
 
 function initWorldObjects()
 {
-    var obj = 12;
+    var planet;
 
-    rootObject = new sphere(null);
+    //todo create variable into glob var
+    rootObject = new sphere(null,sizeSun);
+    rootObject.imgTexture = "./img/sun.jpg";
     rootObject.translate([0,0,0]);
+    rootObject.revolutionParam = 0.3;
     objects.push(rootObject);
 
-    /*for (var i=0; i < obj; i++)
-    {
-        var newObject = new triangle(rootObject);
-        objects.push(newObject);
-        newObject.rotate(-i*Math.PI/12, [0,0,1])
-        newObject.translate([2,0,i/100])
-        newObject.scale([1-i/12,1-i/12,1-i/12])
+    for (var i = 0; i < planets.length; i++){
+        planet = new sphere(rootObject,planets[i].radius);
+        planet.imgTexture = planets[i].texture;
+        planet.translate(planets[i].translate);
+        planet.orbitParam = planets[i].orbit;
+        planet.revolutionParam = planets[i].revolution;
+        objects.push(planet);
+        for(var j =0; j <  planets[i].moons.length;j++){
+            var moon = new sphere(planet,planets[i].moons[j].radius);
+            moon.imgTexture = planets[i].moons[j].texture;
+            moon.orbitParam = planets[i].moons[j].orbit;
+            moon.revolutionParam = planets[i].moons[j].revolution;
+            objects.push(moon);
+            moon.translate(planets[i].moons[j].translate);
+        }
     }
-
-    var newObject = new square(rootObject);
-    objects.push(newObject);
-    newObject.translate([0,2,0]);
-
-    newObject = new sphere(rootObject);
-    objects.push(newObject);
-    newObject.translate([2,2,0]);*/
-
 
     return rootObject;
 }
@@ -231,17 +239,25 @@ function tick() {
     }
 }
 
+function drawTexture() {
+    for(var i=0;i<objects.length;i++){
+        objects[i].texture = textures[i];
+    }
+}
+
 function webGLStart() {
     //webGL
     initGL(canvas);
     initShaders();
     rootObject = initWorldObjects();
     initTexture();
+    drawTexture();
 
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
     gl.enable(gl.DEPTH_TEST);
 
     //interactions
+    // true to enable interactions
     interaction(false);
     drawStyle = gl.TRIANGLES;
     tick();
