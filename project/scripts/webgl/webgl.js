@@ -2,19 +2,6 @@
  * Created by zank on 23/04/16.
  */
 //SHADERS
-function initGL(canvas)
-{
-    try
-    {
-        gl = canvas.getContext("experimental-webgl");
-        gl.viewportWidth = canvas.width;
-        gl.viewportHeight = canvas.height;
-    } catch (e) {}
-    if (!gl)
-    {
-        alert("Could not initialise WebGL, sorry :-(");
-    }
-}
 
 function getShader(gl, id)
 {
@@ -149,21 +136,6 @@ function handleLoadedTexture(texture)
 
 //INITGL
 
-function degToRad(degrees)
-{
-    return degrees * Math.PI / 180;
-}
-
-//add radius to change sphere size
-function pol2Cart(longi, lat, radius)
-{
-    return [
-        Math.cos(degToRad(lat))*Math.sin(degToRad(longi))*radius,
-        Math.sin(degToRad(lat))*radius,
-        Math.cos(degToRad(lat))*Math.cos(degToRad(longi))*radius
-    ];
-}
-
 function drawScene()
 {
     gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
@@ -181,38 +153,55 @@ function drawScene()
     gl.bindTexture(gl.TEXTURE_2D, textures[0]);
     gl.uniform1i(shaderProgram.samplerUniform, 0);
 
-    rootObject.draw();
+    rootObjects.forEach(function (rootObject) {
+        rootObject.draw();
+    });
 }
 
 function initWorldObjects()
 {
-    var planet;
-
-    //todo create variable into glob var
-    rootObject = new sphere(null,sizeSun);
-    rootObject.imgTexture = "./img/sun.jpg";
-    rootObject.translate([0,0,0]);
-    rootObject.revolutionParam = 0.3;
-    objects.push(rootObject);
-
-    for (var i = 0; i < planets.length; i++){
-        planet = new sphere(rootObject,planets[i].radius);
-        planet.imgTexture = planets[i].texture;
-        planet.translate(planets[i].translate);
-        planet.orbitParam = planets[i].orbit;
-        planet.revolutionParam = planets[i].revolution;
-        objects.push(planet);
-        for(var j =0; j <  planets[i].moons.length;j++){
-            var moon = new sphere(planet,planets[i].moons[j].radius);
-            moon.imgTexture = planets[i].moons[j].texture;
-            moon.orbitParam = planets[i].moons[j].orbit;
-            moon.revolutionParam = planets[i].moons[j].revolution;
-            objects.push(moon);
-            moon.translate(planets[i].moons[j].translate);
-        }
+     for (var i = 0; i < univers.length; i++){
+         for(var m = 0 ; m < univers[i].galaxies.length; m++){
+             var galaxies = univers[i].galaxies;
+             var galaxy = createObject(galaxies[m].object_type,galaxies[m].radius,null);
+             rootObjects.push(galaxy);
+             for (var j =0; j< univers[i].galaxies[m].suns.length; j++){
+                 var suns = univers[i].galaxies[m].suns;
+                 var sun = createObject(suns[j].object_type,suns[j].radius,galaxy);
+                 sun = initObject(sun,suns[j]);
+                 //usefull for textures
+                 objects.push(sun);
+                 for (var k=0; k<suns[j].planets.length;k++){
+                     var planets = suns[j].planets;
+                     var planet = createObject(planets[k].object_type,planets[k].radius,sun);
+                     planet = initObject(planet,planets[k]);
+                     objects.push(planet);
+                     for(var l =0; l <  planets[k].moons.length;l++){
+                         var moons = planets[k].moons;
+                         var moon = createObject(moons[l].object_type,moons[l].radius,planet);
+                         moon = initObject(moon,moons[l]);
+                         objects.push(moon);
+                     }
+                 }
+             }
+         }
     }
+}
 
-    return rootObject;
+function initObject(obj, objParam){
+    obj.imgTexture = objParam.texture;
+    obj.translate(objParam.translate);
+    obj.orbitParam=objParam.orbit;
+    obj.revolutionParam=objParam.revolution;
+    return obj;
+}
+
+function createObject(type, radius, root){
+    switch (type) {
+        case 'sphere':
+            return new sphere(root,radius);
+        break;
+    }
 }
 
 function animate()
@@ -227,7 +216,9 @@ function animate()
         rSquare += (75 * elapsed) / 1000.0;
         rSphere += (50 * elapsed) / 1000.0;
     }
-    rootObject.animate(elapsed);
+    rootObjects.forEach(function(rootObject){
+        rootObject.animate(elapsed);
+    });
     lastTime = timeNow;
 }
 
@@ -247,7 +238,7 @@ function drawTexture() {
 
 function webGLStart() {
     //webGL
-    initGL(canvas);
+    //initGL(canvas);
     initShaders();
     rootObject = initWorldObjects();
     initTexture();
@@ -258,7 +249,7 @@ function webGLStart() {
 
     //interactions
     // true to enable interactions
-    interaction(false);
+    interaction(true);
     drawStyle = gl.TRIANGLES;
     tick();
 }
