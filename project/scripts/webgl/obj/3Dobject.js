@@ -1,14 +1,17 @@
 //INITWORLD
-function worldObject(parent) {
+function WorldObject(parent) {
     this.localTransformation = mat4.create();
     this.orbitTransformation = mat4.create();
     this.revolutionTransformation = mat4.create();
     this.children = [];
     this.vertexPositionBuffer = null;
     this.vertexTextureCoordBuffer = null;
+    this.sphereVertexNormalBuffer = null;
     this.vertexIndexBuffer = null;
     this.toggled = true;
     this.revolutionParam = 0;
+    this.objectType = "";
+    this.positionXYZ = [];
     this.orbitParam = 0;
     // il faudra sans doute ajouter des choses ici pour gérer les nomales
     this.texture = null;
@@ -18,27 +21,23 @@ function worldObject(parent) {
     if (parent != null) parent.addChild(this);
 }
 
-worldObject.prototype.addChild = function (child) {
+WorldObject.prototype.addChild = function (child) {
     this.children.push(child);
-}
+};
 
-worldObject.prototype.translate = function (translation) {
+WorldObject.prototype.translate = function (translation) {
     mat4.translate(this.localTransformation, translation);
-}
+};
 
-worldObject.prototype.rotate = function (rotation, axis) {
-    mat4.rotate(this.revolutionTransformation, rotation, axis);
-}
+WorldObject.prototype.rotate = function (matrix,rotation, axis) {
+    mat4.rotate(matrix, rotation, axis);
+};
 
-worldObject.prototype.orbit = function (rotation, axis) {
-    mat4.rotate(this.orbitTransformation, rotation, axis);
-}
-
-worldObject.prototype.scale = function (scale) {
+WorldObject.prototype.scale = function (scale) {
     mat4.scale(this.localTransformation, scale);
-}
+};
 
-worldObject.prototype.draw = function () {
+WorldObject.prototype.draw = function () {
     if (this.toggled) {
         if (this.texture != null) {
             //gl.activeTexture(this.texture.getbind()); todo issue
@@ -60,7 +59,26 @@ worldObject.prototype.draw = function () {
         gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexTextureCoordBuffer);
         gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, this.vertexTextureCoordBuffer.itemSize, gl.FLOAT, false, 0, 0);
 
-        // il faudra sans doute ajouter des choses ici pour gérer les nomales todo
+        //lighting
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.sphereVertexNormalBuffer);
+        gl.vertexAttribPointer(shaderProgram.vertexNormalAttribute, this.sphereVertexNormalBuffer.itemSize, gl.FLOAT, false, 0, 0);
+
+        if(this.objectType === 'sun'){
+            var lighting = true;
+            gl.uniform1i(shaderProgram.useLightingUniform, lighting);
+            if (lighting) {
+                //gl.uniform3f(shaderProgram.ambientColorUniform,0.2,0.2,0.2);
+
+                //gl.uniform3f(shaderProgram.pointLightingLocationUniform,camX,0,camZ);
+                var rot = pol2Cart(0,radToDeg(camHeight),1);
+                gl.uniform3f(shaderProgram.pointLightingLocationUniform,
+                    this.positionXYZ[0]+camX,
+                    this.positionXYZ[1],
+                    this.positionXYZ[2]-10+camZ);
+
+                gl.uniform3f(shaderProgram.pointLightingColorUniform,1,1,1);
+            }
+        }
 
         setMatrixUniforms();
         if (this.vertexIndexBuffer == null) {
@@ -70,6 +88,7 @@ worldObject.prototype.draw = function () {
             gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.vertexIndexBuffer);
             gl.drawElements(drawStyle, this.vertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
         }
+
         //eviter que la revolution des enfants soit influencé par la mienne
         mvPopMatrix();
 
@@ -79,13 +98,13 @@ worldObject.prototype.draw = function () {
         }
         mvPopMatrix();
     }
-}
+};
 
-worldObject.prototype.animate = function (elapsedTime) {
+WorldObject.prototype.animate = function (elapsedTime) {
     //animate children
     for (var i = 0; i < this.children.length; i++) {
         this.children[i].animate(elapsedTime);
     }
-    this.orbit(this.orbitParam * 0.001 * elapsedTime, [0, 1, 0]); // cette ligne est surement discutable comme animation par défaut!
-    this.rotate(this.revolutionParam * 0.001 * elapsedTime, [0, 1, 0]);
+    this.rotate(this.orbitTransformation, this.orbitParam * 0.001 * elapsedTime, [0, 1, 0]); // cette ligne est surement discutable comme animation par défaut!
+    this.rotate(this.revolutionTransformation, this.revolutionParam * 0.001 * elapsedTime, [0, 1, 0]);
 };

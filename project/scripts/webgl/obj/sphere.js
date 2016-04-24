@@ -1,28 +1,30 @@
-sphere.prototype = new worldObject;
-function sphere(parent, radius) {
-    this.base = worldObject;
+Sphere.prototype = new WorldObject;
+function Sphere(parent, radius, type) {
+    this.base = WorldObject;
     this.base(parent);
     this.radius = radius;
-    var buffers = this.initBuffers();
-    this.vertexPositionBuffer = buffers[0];
-    this.vertexTextureCoordBuffer = buffers[1];
-    this.vertexIndexBuffer = buffers[2];
-    //il manque surement quelque chose pour les normales ici
+    this.objectType = type;
+    this.initBuffers();
 }
 
-sphere.prototype.initBuffers = function () {
-    //il manque le code des normales à ajouter!
+Sphere.prototype.initBuffers = function () {
     vertices = [];
-    textureCoords = [];
+    var textureCoords = [];
     var nbVertice = 0;
     var sphereVertexIndices = [];
+    var normal = [];
     var nbTriangles = 0;
     var resLat = 0;
+    var dir =1;
     var resLongi = tetaMax / pasLong + 1;
     for (var lat = -90; lat <= phiMax; lat += pasLat) {
+
         for (var longi = 0; longi <= tetaMax; longi += pasLong) {
-            vertices = vertices.concat(pol2Cart(longi, lat, this.radius)); //A
-            //il manque le code des normales à ajouter!
+            var vertices = vertices.concat(pol2Cart(longi, lat, this.radius)); //A
+            if(this.objectType === 'sun'){
+                dir = -1;
+            }
+            normal = normal.concat(pol2Cart(longi, lat, dir));
             textureCoords = textureCoords.concat([longi / tetaMax, (90 + lat) / (90 + phiMax)]);
             if (longi != tetaMax) {
                 if (lat < phiMax) {
@@ -44,25 +46,36 @@ sphere.prototype.initBuffers = function () {
         resLat++;
     }
 
-    vertexPositionBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, vertexPositionBuffer);
+    this.vertexPositionBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexPositionBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
-    vertexPositionBuffer.itemSize = 3;
-    vertexPositionBuffer.numItems = nbVertice;
+    this.vertexPositionBuffer.itemSize = 3;
+    this.vertexPositionBuffer.numItems = nbVertice;
 
-    vertexIndexBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, vertexIndexBuffer);
+    this.vertexIndexBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.vertexIndexBuffer);
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(sphereVertexIndices), gl.STATIC_DRAW);
-    vertexIndexBuffer.itemSize = 1;
-    vertexIndexBuffer.numItems = nbTriangles * 3;
+    this.vertexIndexBuffer.itemSize = 1;
+    this.vertexIndexBuffer.numItems = nbTriangles * 3;
 
-    vertexTextureCoordBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, vertexTextureCoordBuffer);
+    this.vertexTextureCoordBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexTextureCoordBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoords), gl.STATIC_DRAW);
-    vertexTextureCoordBuffer.itemSize = 2;
-    vertexTextureCoordBuffer.numItems = nbVertice;
+    this.vertexTextureCoordBuffer.itemSize = 2;
+    this.vertexTextureCoordBuffer.numItems = nbVertice;
 
-    //il manque le code des normales à ajouter! todo
+    this.sphereVertexNormalBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.sphereVertexNormalBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(normal), gl.STATIC_DRAW);
+    this.sphereVertexNormalBuffer.itemSize = 3;
+    this.sphereVertexNormalBuffer.numItems = normal.length / 3;
+};
 
-    return [vertexPositionBuffer, vertexTextureCoordBuffer, vertexIndexBuffer];
+Sphere.prototype.initObject = function(objParam){
+    this.name = objParam.name;
+    this.imgTexture = objParam.texture;
+    this.translate(objParam.translate);
+    this.orbitParam=objParam.orbit;
+    this.revolutionParam=objParam.revolution;
+    this.positionXYZ = objParam.translate;
 };

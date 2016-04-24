@@ -60,8 +60,7 @@ function initShaders()
     gl.attachShader(shaderProgram, fragmentShader);
     gl.linkProgram(shaderProgram);
 
-    if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS))
-    {
+    if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
         alert("Could not initialise shaders");
     }
 
@@ -73,9 +72,17 @@ function initShaders()
     shaderProgram.textureCoordAttribute = gl.getAttribLocation(shaderProgram, "aTextureCoord");
     gl.enableVertexAttribArray(shaderProgram.textureCoordAttribute);
 
+    shaderProgram.vertexNormalAttribute = gl.getAttribLocation(shaderProgram, "aVertexNormal");
+    gl.enableVertexAttribArray(shaderProgram.vertexNormalAttribute);
+
     shaderProgram.pMatrixUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
     shaderProgram.mvMatrixUniform = gl.getUniformLocation(shaderProgram, "uMVMatrix");
+    shaderProgram.nMatrixUniform = gl.getUniformLocation(shaderProgram, "uNMatrix");
     shaderProgram.samplerUniform = gl.getUniformLocation(shaderProgram, "uSampler");
+    shaderProgram.useLightingUniform = gl.getUniformLocation(shaderProgram, "uUseLighting");
+    shaderProgram.ambientColorUniform = gl.getUniformLocation(shaderProgram, "uAmbientColor");
+    shaderProgram.pointLightingLocationUniform = gl.getUniformLocation(shaderProgram, "uPointLightingLocation");
+    shaderProgram.pointLightingColorUniform = gl.getUniformLocation(shaderProgram, "uPointLightingColor");
 }
 
 function mvPushMatrix()
@@ -98,6 +105,10 @@ function setMatrixUniforms()
 {
     gl.uniformMatrix4fv(shaderProgram.pMatrixUniform, false, pMatrix);
     gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform, false, mvMatrix);
+    var normalMatrix = mat3.create();
+    mat4.toInverseMat3(mvMatrix, normalMatrix);
+    mat3.transpose(normalMatrix);
+    gl.uniformMatrix3fv(shaderProgram.nMatrixUniform, false, normalMatrix);
 }
 
 
@@ -141,13 +152,17 @@ function drawScene()
     gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-    mat4.perspective(45, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0, pMatrix);
+    mat4.perspective(45, gl.viewportWidth / gl.viewportHeight, 0.1, 1000.0, pMatrix);
     mat4.identity(mvMatrix);
 
-    mat4.rotate(mvMatrix, -camHeight, [1, 0, 0]);
+    gl.disable(gl.DEPTH_TEST);
+    skybox.draw();
+    gl.enable(gl.DEPTH_TEST);
 
+    mat4.rotate(mvMatrix, -camHeight, [1, 0, 0]);
+    
     mat4.translate(mvMatrix, [camX, 0.0, camZ]);
-    mat4.translate(mvMatrix, [0, 0.0, -10.0]);
+    mat4.translate(mvMatrix, [0, 0.0, -10]);
 
     gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D, textures[0]);
@@ -156,53 +171,61 @@ function drawScene()
     rootObjects.forEach(function (rootObject) {
         rootObject.draw();
     });
+
+
 }
 
-function initWorldObjects()
+function initUniverseObjects()
 {
-     for (var i = 0; i < univers.length; i++){
-         for(var m = 0 ; m < univers[i].galaxies.length; m++){
-             var galaxies = univers[i].galaxies;
+    //todo find a better way for texture...
+     for (var i = 0; i < universe.length; i++){
+
+         for(var m = 0 ; m < universe[i].galaxies.length; m++){
+             var galaxies = universe[i].galaxies;
              var galaxy = createObject(galaxies[m].object_type,galaxies[m].radius,null);
              rootObjects.push(galaxy);
-             for (var j =0; j< univers[i].galaxies[m].suns.length; j++){
-                 var suns = univers[i].galaxies[m].suns;
+
+             for (var j =0; j< universe[i].galaxies[m].suns.length; j++){
+                 var suns = universe[i].galaxies[m].suns;
                  var sun = createObject(suns[j].object_type,suns[j].radius,galaxy);
-                 sun = initObject(sun,suns[j]);
-                 //usefull for textures
+                 sun.initObject(suns[j]);
                  objects.push(sun);
+
                  for (var k=0; k<suns[j].planets.length;k++){
                      var planets = suns[j].planets;
                      var planet = createObject(planets[k].object_type,planets[k].radius,sun);
-                     planet = initObject(planet,planets[k]);
+                     planet.initObject(planets[k]);
                      objects.push(planet);
+
                      for(var l =0; l <  planets[k].moons.length;l++){
                          var moons = planets[k].moons;
                          var moon = createObject(moons[l].object_type,moons[l].radius,planet);
-                         moon = initObject(moon,moons[l]);
+                         moon.initObject(moons[l]);
                          objects.push(moon);
                      }
                  }
              }
          }
     }
+
+    skybox = new Sphere(null,2);
+    skybox.imgTexture = "./img/stars.jpg";
+    objects.push(skybox);
 }
 
-function initObject(obj, objParam){
-    obj.imgTexture = objParam.texture;
-    obj.translate(objParam.translate);
-    obj.orbitParam=objParam.orbit;
-    obj.revolutionParam=objParam.revolution;
-    return obj;
-}
-
-function createObject(type, radius, root){
+var createObject = function(type, radius, root){
     switch (type) {
-        case 'sphere':
-            return new sphere(root,radius);
-        break;
+        case 'galaxy':
+            return new Sphere(root,radius, type);
+            break;
+        case 'sun':
+            return new Sphere(root,radius, type);
+            break;
+        case 'planet':
+            return new Sphere(root,radius, type);
+            break;
     }
-}
+};
 
 function animate()
 {
@@ -230,7 +253,7 @@ function tick() {
     }
 }
 
-function drawTexture() {
+function prepareTexture() {
     for(var i=0;i<objects.length;i++){
         objects[i].texture = textures[i];
     }
@@ -240,9 +263,9 @@ function webGLStart() {
     //webGL
     //initGL(canvas);
     initShaders();
-    rootObject = initWorldObjects();
+    rootObject = initUniverseObjects();
     initTexture();
-    drawTexture();
+    prepareTexture();
 
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
     gl.enable(gl.DEPTH_TEST);

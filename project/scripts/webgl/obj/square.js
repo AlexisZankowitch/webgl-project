@@ -1,11 +1,11 @@
 function square(parent)
 	{
-		this.base = worldObject;
+		this.base = WorldObject;
 		this.base (parent);
 		this.vertexPositionBuffer = this.initVertexPositionBuffer();
 		this.vertexTextureCoordBuffer = this.initTextureCoordPositionBuffer();
 	}
-	square.prototype= new worldObject;
+	square.prototype= new WorldObject;
 	square.prototype.initVertexPositionBuffer = function()
 	{
 		var vertices = [

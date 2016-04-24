@@ -1,7 +1,7 @@
-grassBall.prototype= new worldObject;
+grassBall.prototype= new WorldObject;
 	function grassBall(parent)
 	{
-		this.base = worldObject;
+		this.base = WorldObject;
 		this.base (parent);
 		var buffers = this.initBuffers();
 		//this.vertexPositionBuffer = this.initVertexPositionBuffer();

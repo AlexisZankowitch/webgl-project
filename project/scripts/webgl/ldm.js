@@ -1,21 +1,20 @@
 /**
  * Created by zank on 24/04/16.
  */
-var univers = [
+var universe = [
     {
         'galaxies': [{
             'name': 'milkyway',
             'translate': [0, 0, 0],
-            'object_type': 'sphere',
-            'radius': 0,
+            'object_type': 'galaxy',
             'suns': [
                 {
                     'name': 'sun',
                     'texture': "./img/sun.jpg",
-                    'translate': [2, 0, 0],
-                    'orbit': 0.2,
+                    'translate': [0, 0, 0],
+                    'orbit': 0,
                     'revolution': 0.3,
-                    'object_type': 'sphere',
+                    'object_type': 'sun',
                     'radius': 2,
                     'planets': [
                         {
@@ -27,7 +26,7 @@ var univers = [
                                 '2': [0, 0, 1]
                             },
                             'scale': [1, 1, 1],
-                            'object_type': 'sphere',
+                            'object_type': 'planet',
                             'radius': 0.1,
                             'moons': [],
                             'orbit': 0.2,
@@ -41,7 +40,7 @@ var univers = [
                                 '2': [3.5, 0, 1]
                             },
                             'scale': [1, 1, 1],
-                            'object_type': 'sphere',
+                            'object_type': 'planet',
                             'radius': 0.13,
                             'moons': [],
                             'orbit': 0.5,
@@ -55,7 +54,7 @@ var univers = [
                                 '2': [0, 0, 1]
                             },
                             'scale': [1, 1, 1],
-                            'object_type': 'sphere',
+                            'object_type': 'planet',
                             'radius': 0.15,
                             'moons': [
                                 {
@@ -67,7 +66,7 @@ var univers = [
                                         '2': [0, 0, 1]
                                     },
                                     'scale': [1, 1, 1],
-                                    'object_type': 'sphere',
+                                    'object_type': 'planet',
                                     'radius': 0.02,
                                     'orbit': 1,
                                     'revolution': 1
@@ -85,7 +84,7 @@ var univers = [
                                 '2': [0, 0, 1]
                             },
                             'scale': [1, 1, 1],
-                            'object_type': 'sphere',
+                            'object_type': 'planet',
                             'radius': 0.11,
                             'moons': [],
                             'orbit': 1.2,
@@ -100,7 +99,7 @@ var univers = [
                                 '2': [0, 0, 1]
                             },
                             'scale': [1, 1, 1],
-                            'object_type': 'sphere',
+                            'object_type': 'planet',
                             'radius': 0.85,
                             'moons': [],
                             'orbit': 0.7,
@@ -114,7 +113,7 @@ var univers = [
                                 '2': [0, 0, 1]
                             },
                             'scale': [1, 1, 1],
-                            'object_type': 'sphere',
+                            'object_type': 'planet',
                             'radius': 0.7,
                             'moons': [],
                             'orbit': 1.5,
@@ -128,7 +127,7 @@ var univers = [
                                 '2': [0, 0, 1]
                             },
                             'scale': [1, 1, 1],
-                            'object_type': 'sphere',
+                            'object_type': 'planet',
                             'radius': 0.4,
                             'moons': [],
                             'orbit': 1,
@@ -142,7 +141,7 @@ var univers = [
                                 '2': [0, 0, 1]
                             },
                             'scale': [1, 1, 1],
-                            'object_type': 'sphere',
+                            'object_type': 'planet',
                             'radius': 0.5,
                             'moons': [],
                             'orbit': 1.3,
@@ -153,10 +152,10 @@ var univers = [
                 {
                     'name': 'sun',
                     'texture': "./img/sun.jpg",
-                    'translate': [-20, -15, 0],
-                    'orbit': 0.1,
+                    'translate': [-200, 10, 50],
+                    'orbit': 0,
                     'revolution': 0.3,
-                    'object_type': 'sphere',
+                    'object_type': 'sun',
                     'radius': 2,
                     'planets': []
                 }
@@ -164,12 +163,28 @@ var univers = [
                 {
                     'name': 'sun',
                     'texture': "./img/sun.jpg",
-                    'translate': [20, 10, 0],
-                    'orbit': 0.1,
+                    'translate': [30, 17, 30],
+                    'orbit': 0,
                     'revolution': 0.3,
-                    'object_type': 'sphere',
+                    'object_type': 'sun',
                     'radius': 2,
-                    'planets': []
+                    'planets': [
+                        {
+                            'name': 'jupiter',
+                            'texture': "./img/jupiter.jpg",
+                            'translate': [6.5, 0, 0],
+                            'rotate': {
+                                '1': 'Math.PI/12',
+                                '2': [0, 0, 1]
+                            },
+                            'scale': [1, 1, 1],
+                            'object_type': 'planet',
+                            'radius': 0.85,
+                            'moons': [],
+                            'orbit': 0.7,
+                            'revolution': 2
+                        }
+                    ]
                 }
             ]
         }]

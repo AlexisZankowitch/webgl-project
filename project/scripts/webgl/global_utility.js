@@ -53,6 +53,8 @@ var canvas = document.getElementById("scene");
 //boolean
 var tex_loaded = false;
 
+var skybox;
+
 //init GL
 function initGL(canvas)
 {

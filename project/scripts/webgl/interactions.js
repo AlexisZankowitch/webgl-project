@@ -65,10 +65,14 @@ function handleKeyDown(event) {
             camZ--;
             break;
         case 33: //pageUp
+            console.log(radToDeg(camHeight));
             camHeight += degToRad(1);
+            console.log(radToDeg(camHeight));
+            console.log(pol2Cart(0,radToDeg(camHeight),1));
             break;
         case 34: //pageDown
             camHeight -= degToRad(1);
+            console.log(pol2Cart(0,radToDeg(camHeight),1));
             break;
 
         default:
@@ -89,7 +93,7 @@ function handleClick(checkMesh) {
         case 'square':
             toggleSquare = checkMesh.checked;
             break;
-        case 'sphere':
+        case 'Sphere':
             toggleSphere = checkMesh.checked;
             break;
         default:

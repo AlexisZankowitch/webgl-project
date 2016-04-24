@@ -1,8 +1,8 @@
-triangle.prototype = new worldObject;
+triangle.prototype = new WorldObject;
 
 function triangle(parent)
 {
-	this.base = worldObject;
+	this.base = WorldObject;
 	this.base (parent);
 	this.vertexPositionBuffer = this.initVertexPositionBuffer();
 	this.vertexTextureCoordBuffer = this.initTextureCoordPositionBuffer();

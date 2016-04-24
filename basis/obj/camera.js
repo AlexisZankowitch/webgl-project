@@ -1,7 +1,7 @@
-camera.prototype= new worldObject;
+camera.prototype= new WorldObject;
 function camera(parent)
 {
-	this.base = worldObject;
+	this.base = WorldObject;
 	this.base(parent);
 	this.x = 0;
 	this.z = 0;
