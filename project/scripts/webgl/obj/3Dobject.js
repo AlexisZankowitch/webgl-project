@@ -69,12 +69,11 @@ WorldObject.prototype.draw = function () {
             if (lighting) {
                 //gl.uniform3f(shaderProgram.ambientColorUniform,0.2,0.2,0.2);
 
-                //gl.uniform3f(shaderProgram.pointLightingLocationUniform,camX,0,camZ);
                 var rot = pol2Cart(0,radToDeg(camHeight),1);
                 gl.uniform3f(shaderProgram.pointLightingLocationUniform,
                     this.positionXYZ[0]+camX,
-                    this.positionXYZ[1],
-                    this.positionXYZ[2]-10+camZ);
+                    mvMatrix[13],
+                    this.positionXYZ[2]+startPosCamZ+camZ);
 
                 gl.uniform3f(shaderProgram.pointLightingColorUniform,1,1,1);
             }

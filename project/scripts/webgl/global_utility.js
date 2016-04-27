@@ -36,10 +36,10 @@ var toggleSphere = true;
 var camX = 0;
 var camZ = 0;
 var camHeight = 0;
-
+var startPosCamZ = -300;
 //world
-var objects = [];
 var rootObjects = [];
+var universe;
 
 //geometry
 var pasLat = 3;

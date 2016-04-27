@@ -115,22 +115,25 @@ function setMatrixUniforms()
 //TEXTURES
 function initTexture()
 {
-    for (var i=0; i<objects.length;i++){
-        createTexture(i,objects[i].imgTexture);
+    var compteur = 0;
+    for (var i=0; i<universe.length;i++){
+        createTexture(universe[i],universe[i].imgTexture,compteur);
+        compteur++;
     }
 }
 
-function createTexture(i,src){
-    textures[i] = gl.createTexture();
-    textures[i].image = new Image();
-    textures[i].image.onload = function()
+function createTexture(element,src,compteur){
+    element.texture = gl.createTexture();
+    element.texture.image = new Image();
+    element.texture.image.onload = function()
     {
-        handleLoadedTexture(textures[i]);
-        if(i === objects.length-1){
+        handleLoadedTexture(element.texture); //todo issue element.texture undefine LOL
+        compteur++;
+        if(compteur === universe.length-1){
             tex_loaded = true;
         }
     };
-    textures[i].image.src = src;
+    element.texture.image.src = src;
 }
 
 function handleLoadedTexture(texture)
@@ -155,14 +158,16 @@ function drawScene()
     mat4.perspective(45, gl.viewportWidth / gl.viewportHeight, 0.1, 1000.0, pMatrix);
     mat4.identity(mvMatrix);
 
-    gl.disable(gl.DEPTH_TEST);
-    skybox.draw();
-    gl.enable(gl.DEPTH_TEST);
+    if(universe.skybox){
+        gl.disable(gl.DEPTH_TEST);
+        universe.skybox.draw();
+        gl.enable(gl.DEPTH_TEST);
+    }
 
     mat4.rotate(mvMatrix, -camHeight, [1, 0, 0]);
     
     mat4.translate(mvMatrix, [camX, 0.0, camZ]);
-    mat4.translate(mvMatrix, [0, 0.0, -10]);
+    mat4.translate(mvMatrix, [0, 0.0, startPosCamZ]);
 
     gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D, textures[0]);
@@ -177,40 +182,40 @@ function drawScene()
 
 function initUniverseObjects()
 {
+    universe = new Universe();
     //todo find a better way for texture...
-     for (var i = 0; i < universe.length; i++){
+    //todo issue when sun 0,0,0 
+     for (var i = 0; i < universe_ldm.length; i++){
 
-         for(var m = 0 ; m < universe[i].galaxies.length; m++){
-             var galaxies = universe[i].galaxies;
+         for(var m = 0 ; m < universe_ldm[i].galaxies.length; m++){
+             var galaxies = universe_ldm[i].galaxies;
              var galaxy = createObject(galaxies[m].object_type,galaxies[m].radius,null);
+             universe.initiateSkybox(galaxies[m]);
+             universe.push(universe.skybox);
              rootObjects.push(galaxy);
 
-             for (var j =0; j< universe[i].galaxies[m].suns.length; j++){
-                 var suns = universe[i].galaxies[m].suns;
+             for (var j =0; j< galaxies[m].suns.length; j++){
+                 var suns = galaxies[m].suns;
                  var sun = createObject(suns[j].object_type,suns[j].radius,galaxy);
                  sun.initObject(suns[j]);
-                 objects.push(sun);
+                 universe.push(sun);
 
                  for (var k=0; k<suns[j].planets.length;k++){
                      var planets = suns[j].planets;
                      var planet = createObject(planets[k].object_type,planets[k].radius,sun);
                      planet.initObject(planets[k]);
-                     objects.push(planet);
+                     universe.push(planet);
 
                      for(var l =0; l <  planets[k].moons.length;l++){
                          var moons = planets[k].moons;
                          var moon = createObject(moons[l].object_type,moons[l].radius,planet);
                          moon.initObject(moons[l]);
-                         objects.push(moon);
+                         universe.push(moon);
                      }
                  }
              }
          }
     }
-
-    skybox = new Sphere(null,2);
-    skybox.imgTexture = "./img/stars.jpg";
-    objects.push(skybox);
 }
 
 var createObject = function(type, radius, root){
@@ -248,14 +253,9 @@ function animate()
 function tick() {
     requestAnimFrame(tick);
     if(tex_loaded){
+        //true to draw skybox
         drawScene();
         animate();
-    }
-}
-
-function prepareTexture() {
-    for(var i=0;i<objects.length;i++){
-        objects[i].texture = textures[i];
     }
 }
 
@@ -265,7 +265,6 @@ function webGLStart() {
     initShaders();
     rootObject = initUniverseObjects();
     initTexture();
-    prepareTexture();
 
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
     gl.enable(gl.DEPTH_TEST);

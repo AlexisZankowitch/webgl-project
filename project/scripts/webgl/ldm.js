@@ -1,16 +1,45 @@
 /**
  * Created by zank on 24/04/16.
  */
-var universe = [
+
+var basePath = "./img/";
+var sunsPath = "suns/";
+var planetsPath = "planets/";
+
+var tabTextures = {
+    'suns' : [
+        basePath+sunsPath+"sun.jpg"
+    ],
+    'planets' : [
+        basePath+planetsPath+"earth.jpg",
+        basePath+planetsPath+"jupiter.jpg",
+        basePath+planetsPath+"mars.jpg",
+        basePath+planetsPath+"mercure.jpg",
+        basePath+planetsPath+"moon.gif",
+        basePath+planetsPath+"neptune.jpg",
+        basePath+planetsPath+"saturn.png",
+        basePath+planetsPath+"uranus.png",
+        basePath+planetsPath+"venus.jpg"
+    ],
+    "universe" : [
+        basePath+"stars.jpg"
+    ]
+};
+
+
+//todo create univers procedural
+var universe_ldm = [
     {
         'galaxies': [{
             'name': 'milkyway',
             'translate': [0, 0, 0],
             'object_type': 'galaxy',
+            'texture': tabTextures.universe[0],
+            'radius': 2,
             'suns': [
                 {
                     'name': 'sun',
-                    'texture': "./img/sun.jpg",
+                    'texture': tabTextures.suns[0],
                     'translate': [0, 0, 0],
                     'orbit': 0,
                     'revolution': 0.3,
@@ -19,7 +48,7 @@ var universe = [
                     'planets': [
                         {
                             'name': 'mercury',
-                            'texture': "./img/mercure.jpg",
+                            'texture': tabTextures.planets[3],
                             'translate': [3, 0, 0],
                             'rotate': {
                                 '1': 'Math.PI/12',
@@ -33,7 +62,7 @@ var universe = [
                             'revolution': 1.5
                         }, {
                             'name': 'venus',
-                            'texture': "./img/venus.jpg",
+                            'texture': tabTextures.planets[8],
                             'translate': [3.5, 0, 0],
                             'rotate': {
                                 '1': 'Math.PI/12',
@@ -47,7 +76,7 @@ var universe = [
                             'revolution': 0.8
                         }, {
                             'name': 'earth',
-                            'texture': "./img/earth.jpg",
+                            'texture': tabTextures.planets[0],
                             'translate': [4.1, 0, 0],
                             'rotate': {
                                 '1': 'Math.PI/12',
@@ -59,7 +88,7 @@ var universe = [
                             'moons': [
                                 {
                                     'name': 'moon',
-                                    'texture': "./img/moon.gif",
+                                    'texture': tabTextures.planets[4],
                                     'translate': [0.2, 0, 0],
                                     'rotate': {
                                         '1': 'Math.PI/12',
@@ -77,7 +106,7 @@ var universe = [
                         },
                         {
                             'name': 'mars',
-                            'texture': "./img/mars.jpg",
+                            'texture': tabTextures.planets[2],
                             'translate': [4.5, 0, 0],
                             'rotate': {
                                 '1': 'Math.PI/12',
@@ -92,7 +121,7 @@ var universe = [
                         }
                         , {
                             'name': 'jupiter',
-                            'texture': "./img/jupiter.jpg",
+                            'texture': tabTextures.planets[1],
                             'translate': [6.5, 0, 0],
                             'rotate': {
                                 '1': 'Math.PI/12',
@@ -106,7 +135,7 @@ var universe = [
                             'revolution': 2
                         }, {
                             'name': 'saturne',
-                            'texture': "./img/saturn.png",
+                            'texture': tabTextures.planets[6],
                             'translate': [9, 0, 0],
                             'rotate': {
                                 '1': 'Math.PI/12',
@@ -120,7 +149,7 @@ var universe = [
                             'revolution': 0.5
                         }, {
                             'name': 'uranus',
-                            'texture': "./img/uranus.png",
+                            'texture': tabTextures.planets[7],
                             'translate': [11, 0, 0],
                             'rotate': {
                                 '1': 'Math.PI/12',
@@ -134,7 +163,7 @@ var universe = [
                             'revolution': 1
                         }, {
                             'name': 'neptune',
-                            'texture': "./img/neptune.jpg",
+                            'texture': tabTextures.planets[5],
                             'translate': [12.5, 0, 0],
                             'rotate': {
                                 '1': 'Math.PI/12',
@@ -151,7 +180,7 @@ var universe = [
                 },
                 {
                     'name': 'sun',
-                    'texture': "./img/sun.jpg",
+                    'texture': tabTextures.suns[0],
                     'translate': [-200, 10, 50],
                     'orbit': 0,
                     'revolution': 0.3,
@@ -162,8 +191,8 @@ var universe = [
                 ,
                 {
                     'name': 'sun',
-                    'texture': "./img/sun.jpg",
-                    'translate': [30, 17, 30],
+                    'texture': tabTextures.suns[0],
+                    'translate': [121, 17, 30],
                     'orbit': 0,
                     'revolution': 0.3,
                     'object_type': 'sun',
@@ -171,7 +200,7 @@ var universe = [
                     'planets': [
                         {
                             'name': 'jupiter',
-                            'texture': "./img/jupiter.jpg",
+                            'texture': tabTextures.planets[1],
                             'translate': [6.5, 0, 0],
                             'rotate': {
                                 '1': 'Math.PI/12',
@@ -185,6 +214,17 @@ var universe = [
                             'revolution': 2
                         }
                     ]
+                }
+                ,
+                {
+                    'name': 'sun',
+                    'texture': tabTextures.suns[0],
+                    'translate': [200, 0, 50],
+                    'orbit': 0,
+                    'revolution': 0.3,
+                    'object_type': 'sun',
+                    'radius': 2,
+                    'planets': []
                 }
             ]
         }]

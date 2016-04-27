@@ -10,6 +10,7 @@ requirejs(["scripts/webgl/obj/3Dobject.js"],function (util) {
             "scripts/webgl/obj/sphere.js",
             "scripts/webgl/obj/square.js",
             "scripts/webgl/obj/camera.js",
+            "scripts/webgl/obj/universe.js",
             "scripts/webgl/obj/triangle.js"],function () {
             console.log("webgl objects loaded");
             loaded_done = true;
