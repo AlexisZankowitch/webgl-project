@@ -127,7 +127,7 @@ function createTexture(element,src,compteur){
     element.texture.image = new Image();
     element.texture.image.onload = function()
     {
-        handleLoadedTexture(element.texture); //todo issue element.texture undefine LOL
+        handleLoadedTexture(element.texture);
         compteur++;
         if(compteur === universe.length-1){
             tex_loaded = true;
@@ -165,9 +165,10 @@ function drawScene()
     }
 
     mat4.rotate(mvMatrix, -camHeight, [1, 0, 0]);
-    
-    mat4.translate(mvMatrix, [camX, 0.0, camZ]);
-    mat4.translate(mvMatrix, [0, 0.0, startPosCamZ]);
+
+    //issue Y cam
+    mat4.translate(mvMatrix, [camPosX, camPosY, camPosZ]);
+    mat4.translate(mvMatrix, [0, 0.0, camPosZ]);
 
     gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D, textures[0]);
@@ -199,6 +200,12 @@ function initUniverseObjects()
                  var sun = createObject(suns[j].object_type,suns[j].radius,galaxy);
                  sun.initObject(suns[j]);
                  universe.push(sun);
+
+                 var input = '<button type="button" class="btn btn-default" ' +
+                     'data-cam-pos-x="'+ suns[j].translate[0] + ' " ' +
+                     'data-cam-pos-y=" '+ suns[j].translate[1] +' " ' +
+                     'data-cam-pos-z=" '+ suns[j].translate[2] +' " '+'>'+ suns[j].name +' system</button>';
+                 $('#system_cam').append(input);
 
                  for (var k=0; k<suns[j].planets.length;k++){
                      var planets = suns[j].planets;
@@ -279,3 +286,14 @@ function webGLStart() {
 //Star script
 webGLStart();
 
+$().ready(function () {
+    $('#system_cam').find('button').click(function (e) {
+        $('#system_cam').find('button').removeClass('active');
+        $(this).addClass('active');
+        e.preventDefault();
+        camPosX = parseInt($(this).attr('data-cam-pos-x')) * -1;
+        camPosY = parseFloat($(this).attr('data-cam-pos-y')) * -1;
+        camPosZ = parseInt($(this).attr('data-cam-pos-z')) * -1;
+        camPosZ -= 10;
+    });
+});

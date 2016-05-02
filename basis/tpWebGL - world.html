@@ -254,7 +254,7 @@
 		
 		mat4.rotate(mvMatrix, -camHeight, [1, 0, 0]);
 		
-		mat4.translate(mvMatrix, [camX, 0.0, camZ]);
+		mat4.translate(mvMatrix, [camPosX, 0.0, camZ]);
 		mat4.translate(mvMatrix, [0, 0.0, -10.0]);
 		
 		gl.activeTexture(gl.TEXTURE0);
@@ -387,10 +387,10 @@
     	switch(event.keyCode)
     	{
 			case 37: //left
-					camX++;
+					camPosX++;
 					break;
 			case 39: //right
-					camX--;
+					camPosX--;
 					break;
 			case 38: //down
 					camZ++;

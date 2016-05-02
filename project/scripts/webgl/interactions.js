@@ -50,27 +50,31 @@ function handleWheel(event) {
 
 function handleKeyDown(event) {
     //console.log(event.keyCode);
-    event.preventDefault();
+    //event.preventDefault();
     switch (event.keyCode) {
         case 37: //left
-            camX++;
+            camPosX++;
             break;
         case 39: //right
-            camX--;
+            camPosX--;
             break;
         case 38: //down
-            camZ++;
+            event.preventDefault();
+            camPosZ++;
             break;
         case 40: //forward
-            camZ--;
+            event.preventDefault();
+            camPosZ--;
             break;
         case 33: //pageUp
-            console.log(radToDeg(camHeight));
+            //console.log(radToDeg(camHeight));
+            event.preventDefault();
             camHeight += degToRad(1);
-            console.log(radToDeg(camHeight));
-            console.log(pol2Cart(0,radToDeg(camHeight),1));
+            /*console.log(radToDeg(camHeight));
+            console.log(pol2Cart(0,radToDeg(camHeight),1));*/
             break;
         case 34: //pageDown
+            event.preventDefault();
             camHeight -= degToRad(1);
             console.log(pol2Cart(0,radToDeg(camHeight),1));
             break;
@@ -78,6 +82,7 @@ function handleKeyDown(event) {
         default:
 
     }
+    console.log([camPosX, camPosY, camPosZ]);
 }
 
 

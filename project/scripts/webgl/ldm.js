@@ -6,6 +6,14 @@ var basePath = "./img/";
 var sunsPath = "suns/";
 var planetsPath = "planets/";
 
+var objectType = {
+    'spheres': [
+        'galaxy',
+        'sun',
+        'planet'
+    ]
+};
+
 var tabTextures = {
     'suns' : [
         basePath+sunsPath+"sun.jpg"
@@ -27,7 +35,7 @@ var tabTextures = {
 };
 
 
-//todo create univers procedural
+//todo create procedural universe
 var universe_ldm = [
     {
         'galaxies': [{
@@ -35,27 +43,27 @@ var universe_ldm = [
             'translate': [0, 0, 0],
             'object_type': 'galaxy',
             'texture': tabTextures.universe[0],
-            'radius': 2,
+            'radius': 1,
             'suns': [
                 {
-                    'name': 'sun',
+                    'name': 'Sun',
                     'texture': tabTextures.suns[0],
                     'translate': [0, 0, 0],
                     'orbit': 0,
                     'revolution': 0.3,
-                    'object_type': 'sun',
+                    'object_type': objectType.spheres[1],
                     'radius': 2,
                     'planets': [
                         {
                             'name': 'mercury',
                             'texture': tabTextures.planets[3],
-                            'translate': [3, 0, 0],
+                            'translate': [3, 0, 1],
                             'rotate': {
                                 '1': 'Math.PI/12',
                                 '2': [0, 0, 1]
                             },
                             'scale': [1, 1, 1],
-                            'object_type': 'planet',
+                            'object_type': objectType.spheres[2],
                             'radius': 0.1,
                             'moons': [],
                             'orbit': 0.2,
@@ -69,7 +77,7 @@ var universe_ldm = [
                                 '2': [3.5, 0, 1]
                             },
                             'scale': [1, 1, 1],
-                            'object_type': 'planet',
+                            'object_type': objectType.spheres[2],
                             'radius': 0.13,
                             'moons': [],
                             'orbit': 0.5,
@@ -83,7 +91,7 @@ var universe_ldm = [
                                 '2': [0, 0, 1]
                             },
                             'scale': [1, 1, 1],
-                            'object_type': 'planet',
+                            'object_type': objectType.spheres[2],
                             'radius': 0.15,
                             'moons': [
                                 {
@@ -95,7 +103,7 @@ var universe_ldm = [
                                         '2': [0, 0, 1]
                                     },
                                     'scale': [1, 1, 1],
-                                    'object_type': 'planet',
+                                    'object_type': objectType.spheres[2],
                                     'radius': 0.02,
                                     'orbit': 1,
                                     'revolution': 1
@@ -113,7 +121,7 @@ var universe_ldm = [
                                 '2': [0, 0, 1]
                             },
                             'scale': [1, 1, 1],
-                            'object_type': 'planet',
+                            'object_type': objectType.spheres[2],
                             'radius': 0.11,
                             'moons': [],
                             'orbit': 1.2,
@@ -128,7 +136,7 @@ var universe_ldm = [
                                 '2': [0, 0, 1]
                             },
                             'scale': [1, 1, 1],
-                            'object_type': 'planet',
+                            'object_type': objectType.spheres[2],
                             'radius': 0.85,
                             'moons': [],
                             'orbit': 0.7,
@@ -142,7 +150,7 @@ var universe_ldm = [
                                 '2': [0, 0, 1]
                             },
                             'scale': [1, 1, 1],
-                            'object_type': 'planet',
+                            'object_type': objectType.spheres[2],
                             'radius': 0.7,
                             'moons': [],
                             'orbit': 1.5,
@@ -156,7 +164,7 @@ var universe_ldm = [
                                 '2': [0, 0, 1]
                             },
                             'scale': [1, 1, 1],
-                            'object_type': 'planet',
+                            'object_type': objectType.spheres[2],
                             'radius': 0.4,
                             'moons': [],
                             'orbit': 1,
@@ -170,7 +178,7 @@ var universe_ldm = [
                                 '2': [0, 0, 1]
                             },
                             'scale': [1, 1, 1],
-                            'object_type': 'planet',
+                            'object_type': objectType.spheres[2],
                             'radius': 0.5,
                             'moons': [],
                             'orbit': 1.3,
@@ -179,23 +187,23 @@ var universe_ldm = [
                     ]
                 },
                 {
-                    'name': 'sun',
+                    'name': 'Atlarus',
                     'texture': tabTextures.suns[0],
                     'translate': [-200, 10, 50],
                     'orbit': 0,
                     'revolution': 0.3,
-                    'object_type': 'sun',
+                    'object_type': objectType.spheres[1],
                     'radius': 2,
                     'planets': []
                 }
                 ,
                 {
-                    'name': 'sun',
+                    'name': 'Hyoptra',
                     'texture': tabTextures.suns[0],
                     'translate': [121, 17, 30],
                     'orbit': 0,
                     'revolution': 0.3,
-                    'object_type': 'sun',
+                    'object_type': objectType.spheres[1],
                     'radius': 2,
                     'planets': [
                         {
@@ -207,7 +215,7 @@ var universe_ldm = [
                                 '2': [0, 0, 1]
                             },
                             'scale': [1, 1, 1],
-                            'object_type': 'planet',
+                            'object_type': objectType.spheres[2],
                             'radius': 0.85,
                             'moons': [],
                             'orbit': 0.7,
@@ -217,12 +225,12 @@ var universe_ldm = [
                 }
                 ,
                 {
-                    'name': 'sun',
+                    'name': 'Liore',
                     'texture': tabTextures.suns[0],
                     'translate': [200, 0, 50],
                     'orbit': 0,
                     'revolution': 0.3,
-                    'object_type': 'sun',
+                    'object_type': objectType.spheres[1],
                     'radius': 2,
                     'planets': []
                 }

@@ -63,17 +63,17 @@ WorldObject.prototype.draw = function () {
         gl.bindBuffer(gl.ARRAY_BUFFER, this.sphereVertexNormalBuffer);
         gl.vertexAttribPointer(shaderProgram.vertexNormalAttribute, this.sphereVertexNormalBuffer.itemSize, gl.FLOAT, false, 0, 0);
 
-        if(this.objectType === 'sun'){
+        if(this.objectType === objectType.spheres[1]){
             var lighting = true;
             gl.uniform1i(shaderProgram.useLightingUniform, lighting);
             if (lighting) {
+                //directional lightning
                 //gl.uniform3f(shaderProgram.ambientColorUniform,0.2,0.2,0.2);
 
-                var rot = pol2Cart(0,radToDeg(camHeight),1);
                 gl.uniform3f(shaderProgram.pointLightingLocationUniform,
-                    this.positionXYZ[0]+camX,
+                    mvMatrix[12],
                     mvMatrix[13],
-                    this.positionXYZ[2]+startPosCamZ+camZ);
+                    mvMatrix[14]);
 
                 gl.uniform3f(shaderProgram.pointLightingColorUniform,1,1,1);
             }

@@ -33,10 +33,10 @@ var toggleTriangle = true;
 var toggleSquare = true;
 var toggleSphere = true;
 
-var camX = 0;
-var camZ = 0;
+var camPosX = 0;
+var camPosY = 0;
+var camPosZ = -100;
 var camHeight = 0;
-var startPosCamZ = -300;
 //world
 var rootObjects = [];
 var universe;
