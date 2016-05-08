@@ -67,15 +67,12 @@ WorldObject.prototype.draw = function () {
             var lighting = true;
             gl.uniform1i(shaderProgram.useLightingUniform, lighting);
             if (lighting) {
-                //directional lightning
-                //gl.uniform3f(shaderProgram.ambientColorUniform,0.2,0.2,0.2);
-
                 gl.uniform3f(shaderProgram.pointLightingLocationUniform,
                     mvMatrix[12],
                     mvMatrix[13],
                     mvMatrix[14]);
 
-                gl.uniform3f(shaderProgram.pointLightingColorUniform,1,1,1);
+                gl.uniform3f(shaderProgram.pointLightingColorUniform,this.lightning[0],this.lightning[1],this.lightning[2]);
             }
         }
 

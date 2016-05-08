@@ -1,5 +1,6 @@
 /**
  * Created by zank on 26/04/16.
+ * NOT USEFULL LOL
  */
 Universe.prototype = [];
 

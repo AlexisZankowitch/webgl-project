@@ -49,8 +49,7 @@ function handleWheel(event) {
 }
 
 function handleKeyDown(event) {
-    //console.log(event.keyCode);
-    //event.preventDefault();
+    $('#system_cam').find('button').removeClass('active');
     switch (event.keyCode) {
         case 37: //left
             camPosX++;
@@ -67,16 +66,12 @@ function handleKeyDown(event) {
             camPosZ--;
             break;
         case 33: //pageUp
-            //console.log(radToDeg(camHeight));
             event.preventDefault();
             camHeight += degToRad(1);
-            /*console.log(radToDeg(camHeight));
-            console.log(pol2Cart(0,radToDeg(camHeight),1));*/
             break;
         case 34: //pageDown
             event.preventDefault();
             camHeight -= degToRad(1);
-            console.log(pol2Cart(0,radToDeg(camHeight),1));
             break;
 
         default:

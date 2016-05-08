@@ -6,6 +6,10 @@ var basePath = "./img/";
 var sunsPath = "suns/";
 var planetsPath = "planets/";
 
+var getRandIndexes = function (tab) {
+    return Math.floor((Math.random() * tab.length));
+};
+
 var objectType = {
     'spheres': [
         'galaxy',
@@ -16,7 +20,30 @@ var objectType = {
 
 var tabTextures = {
     'suns' : [
-        basePath+sunsPath+"sun.jpg"
+        [
+            {
+                'texture' : basePath+sunsPath+"sun.jpg",
+                'lightning' : [1.2,1.2,1.2]
+            }
+        ],
+        [
+            {
+                'texture' : basePath+sunsPath+"redsun.jpg",
+                'lightning' : [1.5,1,1]
+            }
+        ],
+        [
+            {
+                'texture' : basePath+sunsPath+"sun_yellow.jpg",
+                'lightning' : [1,1,1]
+            }
+        ],
+        [
+            {
+                'texture' : basePath+sunsPath+"bluesun.jpg",
+                'lightning' : [1,1,1.5]
+            }
+        ]
     ],
     'planets' : [
         basePath+planetsPath+"earth.jpg",
@@ -30,7 +57,7 @@ var tabTextures = {
         basePath+planetsPath+"venus.jpg"
     ],
     "universe" : [
-        basePath+"stars.jpg"
+        basePath+"milkyway.jpg"
     ]
 };
 
@@ -43,12 +70,15 @@ var universe_ldm = [
             'translate': [0, 0, 0],
             'object_type': 'galaxy',
             'texture': tabTextures.universe[0],
-            'radius': 1,
+            'radius': 800,
+            'orbit':0,
+            'revolution':0.001,
             'suns': [
                 {
                     'name': 'Sun',
-                    'texture': tabTextures.suns[0],
-                    'translate': [0, 0, 0],
+                    'texture': tabTextures.suns[0][0].texture,
+                    'lightning' : tabTextures.suns[0][0].lightning,
+                    'translate': [1, 0, 0],
                     'orbit': 0,
                     'revolution': 0.3,
                     'object_type': objectType.spheres[1],
@@ -187,19 +217,9 @@ var universe_ldm = [
                     ]
                 },
                 {
-                    'name': 'Atlarus',
-                    'texture': tabTextures.suns[0],
-                    'translate': [-200, 10, 50],
-                    'orbit': 0,
-                    'revolution': 0.3,
-                    'object_type': objectType.spheres[1],
-                    'radius': 2,
-                    'planets': []
-                }
-                ,
-                {
                     'name': 'Hyoptra',
-                    'texture': tabTextures.suns[0],
+                    'texture': tabTextures.suns[1][0].texture,
+                    'lightning' : tabTextures.suns[1][0].lightning,
                     'translate': [121, 17, 30],
                     'orbit': 0,
                     'revolution': 0.3,
@@ -225,8 +245,21 @@ var universe_ldm = [
                 }
                 ,
                 {
+                    'name': 'Atlarus',
+                    'texture': tabTextures.suns[2][0].texture,
+                    'lightning' : tabTextures.suns[2][0].lightning,
+                    'translate': [-200, 10, 50],
+                    'orbit': 0,
+                    'revolution': 0.3,
+                    'object_type': objectType.spheres[1],
+                    'radius': 2,
+                    'planets': []
+                }
+                ,
+                {
                     'name': 'Liore',
-                    'texture': tabTextures.suns[0],
+                    'texture': tabTextures.suns[3][0].texture,
+                    'lightning' : tabTextures.suns[3][0].lightning,
                     'translate': [200, 0, 50],
                     'orbit': 0,
                     'revolution': 0.3,

@@ -155,18 +155,14 @@ function drawScene()
     gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-    mat4.perspective(45, gl.viewportWidth / gl.viewportHeight, 0.1, 1000.0, pMatrix);
+    mat4.perspective(45, gl.viewportWidth / gl.viewportHeight, 0.1, 10000.0, pMatrix);
     mat4.identity(mvMatrix);
-
-    if(universe.skybox){
-        gl.disable(gl.DEPTH_TEST);
-        universe.skybox.draw();
-        gl.enable(gl.DEPTH_TEST);
-    }
 
     mat4.rotate(mvMatrix, -camHeight, [1, 0, 0]);
 
-    //issue Y cam
+    //ambient lightning
+    //gl.uniform3f(shaderProgram.ambientColorUniform,0.2,0.2,0.2);
+
     mat4.translate(mvMatrix, [camPosX, camPosY, camPosZ]);
     mat4.translate(mvMatrix, [0, 0.0, camPosZ]);
 
@@ -184,15 +180,14 @@ function drawScene()
 function initUniverseObjects()
 {
     universe = new Universe();
-    //todo find a better way for texture...
     //todo issue when sun 0,0,0 
      for (var i = 0; i < universe_ldm.length; i++){
 
          for(var m = 0 ; m < universe_ldm[i].galaxies.length; m++){
              var galaxies = universe_ldm[i].galaxies;
              var galaxy = createObject(galaxies[m].object_type,galaxies[m].radius,null);
-             universe.initiateSkybox(galaxies[m]);
-             universe.push(universe.skybox);
+             galaxy.initObject(galaxies[m]);
+             universe.push(galaxy);
              rootObjects.push(galaxy);
 
              for (var j =0; j< galaxies[m].suns.length; j++){
@@ -201,7 +196,7 @@ function initUniverseObjects()
                  sun.initObject(suns[j]);
                  universe.push(sun);
 
-                 var input = '<button type="button" class="btn btn-default" ' +
+                 var input = '<button type="button" class="btn btn-primary" ' +
                      'data-cam-pos-x="'+ suns[j].translate[0] + ' " ' +
                      'data-cam-pos-y=" '+ suns[j].translate[1] +' " ' +
                      'data-cam-pos-z=" '+ suns[j].translate[2] +' " '+'>'+ suns[j].name +' system</button>';

@@ -24,6 +24,16 @@ Sphere.prototype.initBuffers = function () {
             if(this.objectType === 'sun'){
                 dir = -1;
             }
+            switch (this.objectType){
+                case 'sun':
+                    dir = -1;
+                    break;
+                case 'galaxy':
+                    dir=-1;
+                    break;
+                default:
+                    dir = 1;
+            }
             normal = normal.concat(pol2Cart(longi, lat, dir));
             textureCoords = textureCoords.concat([longi / tetaMax, (90 + lat) / (90 + phiMax)]);
             if (longi != tetaMax) {
@@ -74,6 +84,9 @@ Sphere.prototype.initBuffers = function () {
 Sphere.prototype.initObject = function(objParam){
     this.name = objParam.name;
     this.imgTexture = objParam.texture;
+    if(objParam.object_type === objectType.spheres[1]){
+        this.lightning = objParam.lightning;
+    }
     this.translate(objParam.translate);
     this.orbitParam=objParam.orbit;
     this.revolutionParam=objParam.revolution;
