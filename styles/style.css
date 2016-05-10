@@ -1,0 +1,15 @@
+body {
+  background-color: #000; }
+  body h1 {
+    color: #ecf0f1; }
+  body .universe-creator {
+    background: #f6f8f9;
+    border: 1px solid;
+    border-radius: 3px;
+    padding: 10px 15px; }
+  body #scene {
+    width: 100%; }
+  body canvas {
+    border: 1px solid; }
+
+/*# sourceMappingURL=style.css.map */
