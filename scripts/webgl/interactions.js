@@ -77,7 +77,6 @@ function handleKeyDown(event) {
         default:
 
     }
-    console.log([camPosX, camPosY, camPosZ]);
 }
 
 

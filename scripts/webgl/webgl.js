@@ -1,7 +1,7 @@
 /**
  * Created by zank on 23/04/16.
  */
-//SHADERS
+
 
 function getShader(gl, id)
 {
@@ -177,14 +177,14 @@ function drawScene()
 
 }
 
-function initUniverseObjects()
+function initUniverseObjects(universeParam)
 {
     universe = new Universe();
     //todo issue when sun 0,0,0 
-     for (var i = 0; i < universe_ldm.length; i++){
+     for (var i = 0; i < universeParam.length; i++){
 
-         for(var m = 0 ; m < universe_ldm[i].galaxies.length; m++){
-             var galaxies = universe_ldm[i].galaxies;
+         for(var m = 0 ; m < universeParam[i].galaxies.length; m++){
+             var galaxies = universeParam[i].galaxies;
              var galaxy = createObject(galaxies[m].object_type,galaxies[m].radius,null);
              galaxy.initObject(galaxies[m]);
              universe.push(galaxy);
@@ -218,6 +218,19 @@ function initUniverseObjects()
              }
          }
     }
+
+    //event buttons
+    $('#system_cam').find('button').click(function (e) {
+        console.log('aze');
+        if(tex_loaded) {
+            $('#system_cam').find('button').removeClass('active');
+            $(this).addClass('active');
+            camPosX = parseInt($(this).attr('data-cam-pos-x')) * -1;
+            camPosY = parseFloat($(this).attr('data-cam-pos-y')) * -1;
+            camPosZ = parseInt($(this).attr('data-cam-pos-z')) * -1;
+            camPosZ -= 10;
+        }
+    });
 }
 
 var createObject = function(type, radius, root){
@@ -261,11 +274,11 @@ function tick() {
     }
 }
 
-function webGLStart() {
+function webGLStart(universe) {
     //webGL
     //initGL(canvas);
     initShaders();
-    rootObject = initUniverseObjects();
+    rootObject = initUniverseObjects(universe);
     initTexture();
 
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
@@ -277,17 +290,3 @@ function webGLStart() {
     drawStyle = gl.TRIANGLES;
     tick();
 }
-
-//Star script
-
-$().ready(function () {
-    $('#system_cam').find('button').click(function (e) {
-        $('#system_cam').find('button').removeClass('active');
-        $(this).addClass('active');
-        e.preventDefault();
-        camPosX = parseInt($(this).attr('data-cam-pos-x')) * -1;
-        camPosY = parseFloat($(this).attr('data-cam-pos-y')) * -1;
-        camPosZ = parseInt($(this).attr('data-cam-pos-z')) * -1;
-        camPosZ -= 10;
-    });
-});

@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="css/animate.css">
     <link rel="stylesheet" href="styles/style.css">
     <script src="scripts/require.js"></script>
+    <script src="scripts/jquery-2.2.3.min.js"></script>
     <script src="scripts/main.js"></script>
 </head>
 <body>
@@ -18,7 +19,7 @@
     </div>
     <div id="loader" class="row">
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
-        	LOADING...
+        	<h3>LOADING...</h3>
         </div>
     </div>
     <div id="main-container" class="row hidden">
@@ -41,23 +42,24 @@
             </div>
             <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
-                    <button class="btn btn-lg btn-success">Build it !</button>
+                    <button id="btn-generate-lmd" class="btn btn-lg btn-primary">Use LDM</button>
+                    <button id="btn-generate" class="btn btn-lg btn-info disabled">Generate universe</button>
                 </div>
             </div>
         </div>
-        <div id="scene-contaier" class="hidden">
-            <div class="row">
-                <div id="container_scene" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                    <canvas id="scene" width="1000px" height="450px">
+    </div>
+    <div id="scene-container" class="hidden">
+        <div class="row">
+            <div id="container_scene" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <canvas id="scene" width="1000px" height="450px">
 
-                    </canvas>
-                </div>
+                </canvas>
             </div>
-            <div class="row">
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
-                    <div id ="system_cam" class="btn-group">
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
+                <div id ="system_cam" class="btn-group">
 
-                    </div>
                 </div>
             </div>
         </div>
@@ -113,6 +115,17 @@
     }
     </script>
 
+    <script !src="">
+        $().ready(function () {
+            //Star script
+            $('#btn-generate-lmd').click(function (e) {
+                e.preventDefault();
+                webGLStart(universe_ldm);
+                $('.universe-creator').addClass('hidden');
+                $('#scene-container').removeClass('hidden').animateCss('fadeIn');
+            });
+        })
+    </script>
 </footer>
 </body>
 </html>

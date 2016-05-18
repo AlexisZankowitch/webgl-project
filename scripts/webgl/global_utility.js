@@ -71,3 +71,63 @@ function initGL(canvas)
 }
 
 initGL(canvas);
+
+
+var basePath = "./img/";
+var sunsPath = "suns/";
+var planetsPath = "planets/";
+
+var getRandIndexes = function (tab) {
+    return Math.floor((Math.random() * tab.length));
+};
+
+var objectType = {
+    'spheres': [
+        'galaxy',
+        'sun',
+        'planet'
+    ]
+};
+
+var tabTextures = {
+    'suns': [
+        [
+            {
+                'texture': basePath + sunsPath + "sun.jpg",
+                'lightning': [1.2, 1.2, 1.2]
+            }
+        ],
+        [
+            {
+                'texture': basePath + sunsPath + "redsun.jpg",
+                'lightning': [1.5, 1, 1]
+            }
+        ],
+        [
+            {
+                'texture': basePath + sunsPath + "sun_yellow.jpg",
+                'lightning': [1, 1, 1]
+            }
+        ],
+        [
+            {
+                'texture': basePath + sunsPath + "bluesun.jpg",
+                'lightning': [1, 1, 1.5]
+            }
+        ]
+    ],
+    'planets': [
+        basePath + planetsPath + "earth.jpg",
+        basePath + planetsPath + "jupiter.jpg",
+        basePath + planetsPath + "mars.jpg",
+        basePath + planetsPath + "mercure.jpg",
+        basePath + planetsPath + "moon.gif",
+        basePath + planetsPath + "neptune.jpg",
+        basePath + planetsPath + "saturn.png",
+        basePath + planetsPath + "uranus.png",
+        basePath + planetsPath + "venus.jpg"
+    ],
+    "universe": [
+        basePath + "milkyway.jpg"
+    ]
+};

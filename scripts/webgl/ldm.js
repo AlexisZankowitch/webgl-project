@@ -2,67 +2,7 @@
  * Created by zank on 24/04/16.
  */
 
-var basePath = "./img/";
-var sunsPath = "suns/";
-var planetsPath = "planets/";
 
-var getRandIndexes = function (tab) {
-    return Math.floor((Math.random() * tab.length));
-};
-
-var objectType = {
-    'spheres': [
-        'galaxy',
-        'sun',
-        'planet'
-    ]
-};
-
-var tabTextures = {
-    'suns' : [
-        [
-            {
-                'texture' : basePath+sunsPath+"sun.jpg",
-                'lightning' : [1.2,1.2,1.2]
-            }
-        ],
-        [
-            {
-                'texture' : basePath+sunsPath+"redsun.jpg",
-                'lightning' : [1.5,1,1]
-            }
-        ],
-        [
-            {
-                'texture' : basePath+sunsPath+"sun_yellow.jpg",
-                'lightning' : [1,1,1]
-            }
-        ],
-        [
-            {
-                'texture' : basePath+sunsPath+"bluesun.jpg",
-                'lightning' : [1,1,1.5]
-            }
-        ]
-    ],
-    'planets' : [
-        basePath+planetsPath+"earth.jpg",
-        basePath+planetsPath+"jupiter.jpg",
-        basePath+planetsPath+"mars.jpg",
-        basePath+planetsPath+"mercure.jpg",
-        basePath+planetsPath+"moon.gif",
-        basePath+planetsPath+"neptune.jpg",
-        basePath+planetsPath+"saturn.png",
-        basePath+planetsPath+"uranus.png",
-        basePath+planetsPath+"venus.jpg"
-    ],
-    "universe" : [
-        basePath+"milkyway.jpg"
-    ]
-};
-
-
-//todo create procedural universe
 var universe_ldm = [
     {
         'galaxies': [{
@@ -71,13 +11,13 @@ var universe_ldm = [
             'object_type': 'galaxy',
             'texture': tabTextures.universe[0],
             'radius': 800,
-            'orbit':0,
-            'revolution':0.001,
+            'orbit': 0,
+            'revolution': 0.001,
             'suns': [
                 {
-                    'name': 'Sun',
+                    'name': 'Solar',
                     'texture': tabTextures.suns[0][0].texture,
-                    'lightning' : tabTextures.suns[0][0].lightning,
+                    'lightning': tabTextures.suns[0][0].lightning,
                     'translate': [1, 0, 0],
                     'orbit': 0,
                     'revolution': 0.3,
@@ -219,7 +159,7 @@ var universe_ldm = [
                 {
                     'name': 'Hyoptra',
                     'texture': tabTextures.suns[1][0].texture,
-                    'lightning' : tabTextures.suns[1][0].lightning,
+                    'lightning': tabTextures.suns[1][0].lightning,
                     'translate': [121, 17, 30],
                     'orbit': 0,
                     'revolution': 0.3,
@@ -247,7 +187,7 @@ var universe_ldm = [
                 {
                     'name': 'Atlarus',
                     'texture': tabTextures.suns[2][0].texture,
-                    'lightning' : tabTextures.suns[2][0].lightning,
+                    'lightning': tabTextures.suns[2][0].lightning,
                     'translate': [-200, 10, 50],
                     'orbit': 0,
                     'revolution': 0.3,
@@ -259,13 +199,29 @@ var universe_ldm = [
                 {
                     'name': 'Liore',
                     'texture': tabTextures.suns[3][0].texture,
-                    'lightning' : tabTextures.suns[3][0].lightning,
+                    'lightning': tabTextures.suns[3][0].lightning,
                     'translate': [200, 0, 50],
                     'orbit': 0,
                     'revolution': 0.3,
                     'object_type': objectType.spheres[1],
                     'radius': 2,
-                    'planets': []
+                    'planets': [
+                        {
+                            'name': 'saturne',
+                            'texture': tabTextures.planets[4],
+                            'translate': [9, 0, 0],
+                            'rotate': {
+                                '1': 'Math.PI/12',
+                                '2': [0, 0, 1]
+                            },
+                            'scale': [1, 1, 1],
+                            'object_type': objectType.spheres[2],
+                            'radius': 0.7,
+                            'moons': [],
+                            'orbit': 1.5,
+                            'revolution': 0.5
+                        }
+                    ]
                 }
             ]
         }]
